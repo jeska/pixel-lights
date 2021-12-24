@@ -42,16 +42,21 @@ void setup() {
   Serial.begin(9600);
   delay(2000);
   FastLED.addLeds<LED_TYPE, DATA_PIN, RGB>(leds, NUM_LEDS).setCorrection(TypicalPixelString);
-  currentPalette = EffinChristmas_p;
-  currentBlending = LINEARBLEND;
+//  currentPalette = EffinChristmas_p;
+//  currentBlending = LINEARBLEND;
 }
 
 void loop() {
-   static uint8_t startIndex = 0;
-   startIndex = startIndex + 1;
-   PaletteFadeByRows(startIndex);
-  
-//   BrightnessFromAnalog();
+// Fade through our Effin' Christmas palette
+//  static uint8_t startIndex = 0;
+//  startIndex = startIndex + 1;
+//  PaletteFadeByRows(startIndex);
+
+// Use an analog input to set the brightness; WIP 
+//  BrightnessFromAnalog();
+
+// Red/Green Adventures
+  RedGreenAlternate();
 }
 
 
@@ -98,6 +103,35 @@ void BrightnessFromAnalog() {
     }
   }
   FastLED.show();
+}
+
+
+void RedGreenAlternate() {
+  for(int h = HUE_RED; h <= HUE_GREEN; h++) {
+    for(int l = 0; l < NUM_LEDS; l++) {
+      if(l % 2 == 0) {
+        leds[l] = CHSV(h,255,255);
+      } else {
+        leds[l] = CHSV(HUE_GREEN - h,255,255);
+      }
+    }
+    FastLED.show();
+    delay(10);
+  }
+  delay(1000);
+  
+  for(int h = HUE_RED; h <= HUE_GREEN; h++) {
+    for(int l = 0; l < NUM_LEDS; l++) {
+      if(l % 2 == 0) {
+        leds[l] = CHSV(HUE_GREEN - h,255,255);
+      } else {
+        leds[l] = CHSV(h,255,255);
+      }
+    }
+    FastLED.show();
+    delay(10);
+  }
+  delay(1000);
 }
 
 // Our lights are snaked vertically; convert the 0-99 index to the right row/col pair
