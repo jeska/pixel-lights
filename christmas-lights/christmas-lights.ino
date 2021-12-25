@@ -56,7 +56,8 @@ void loop() {
 //  BrightnessFromAnalog();
 
 // Red/Green Adventures
-  RedGreenAlternate();
+  //RedGreenAlternate();
+  RedGreenTwinkle();
 }
 
 
@@ -105,6 +106,26 @@ void BrightnessFromAnalog() {
   FastLED.show();
 }
 
+void RedGreenTwinkle() {
+	int indices[NUM_LEDS];
+	
+	for (int i = 0; i < NUM_LEDS; ++i)
+		indices[i] = random(0,359);
+	
+	while (true) {
+		for (int i = 0; i < NUM_LEDS; ++i) {
+			int x = 127 + 127 * sin(indices[i] / 180.0 * 3.1415);
+			leds[i].setRGB(x, 255-x, 0);      
+			indices[i] += random(5,15);
+
+			if (indices[i] >= 360)
+				indices[i] = 0;
+		}
+		
+		FastLED.show();
+		delay(10);
+	}
+}
 
 void RedGreenAlternate() {
   for(int h = HUE_RED; h <= HUE_GREEN; h++) {
